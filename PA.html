@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="flowerShopApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hiya's Flower Shop</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('flower.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        header {
+            background-color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+            padding: 20px;
+        }
+
+        footer {
+            background-color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .navbar {
+            background-color: #333;
+            overflow: hidden;
+        }
+
+        .navbar a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 20px;
+            text-decoration: none;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .active {
+            background-color: #4CAF50;
+        }
+
+        .product-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 20px;
+        }
+
+        .product {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px;
+            width: 300px;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .product img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 30px;
+            margin-top: 5px;
+            margin-bottom: 2px;
+        }
+
+        h2 {
+            font-size: 45px;
+            text-align: left;
+            color: rgb(250, 248, 248);
+        }
+
+        .order-form {
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 5px;
+        }
+
+        .order-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .order-form input,
+        .order-form select,
+        .order-form textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .order-form button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .order-form button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body ng-controller="MainController">
+    <header>
+        <div class="container">
+            <h1><i>Hiya's Flower Shop</i></h1>
+            <nav class="navbar">
+                <a href="" ng-click="setView('home')">Home</a>
+                <a href="" ng-click="setView('order')">Order</a>
+                <a href="" ng-click="setView('about')">About</a>
+                <a href="" ng-click="setView('gallery')">Gallery</a>
+                
+                
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div ng-show="view === 'home'">
+        <h2>Welcome to Hiya's Flower Shop!!!</h2>
+    </div>
+    <div ng-show="view === 'order'">
+        <h2>Order Page</h2>
+        <form class="order-form" name="orderForm" ng-submit="submitOrder()">
+            <label for="name">Name</label>
+            <input type="text" id="name" ng-model="order.name" required>
+            
+            <label for="email">Email</label>
+            <input type="email" id="email" ng-model="order.email" required>
+            
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" ng-model="order.phone" required>
+            
+            <label for="address">Address</label>
+            <textarea id="address" ng-model="order.address" required></textarea>
+            
+            <label for="flower">Flower</label>
+            <select id="flower" ng-model="order.flower" required>
+                <option ng-repeat="flower in flowers" value="{{flower.name}}">{{flower.name}} - {{flower.price}}</option>
+            </select>
+            
+            <button type="submit">Submit Order</button>
+        </form>
+    </div>
+    <div ng-show="view === 'about'">
+        <h2>About Us</h2>
+        <p>We are dedicated to providing high-quality products and excellent customer service. Our team consists of experienced professionals who strive to make your shopping experience enjoyable.</p>
+    </div>
+    <div ng-show="view === 'gallery'">
+        <h2>Gallery</h2>
+        <div class="product-list">
+            <div class="product" ng-repeat="flower in flowers">
+                <img ng-src="{{flower.image}}" alt="{{flower.name}}">
+                <h3>{{flower.name}}</h3>
+                <p>{{flower.description}}</p>
+                <p>{{flower.price}}</p>
+            </div>
+        </div>
+    </div>
+   
+
+
+
+    <footer>
+        <p>&copy; 2024 Flower Shop</p>
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script>
+        var app = angular.module('flowerShopApp', []);
+
+        app.controller('MainController', function($scope) {
+            $scope.view = 'home'; // Default view
+
+            $scope.setView = function(view) {
+                $scope.view = view;
+            };
+
+            $scope.flowers = [
+                {
+                    name: 'Rose Bouquet',
+                    description: 'A beautiful bouquet of red roses.',
+                    price: 'RS.25',
+                    image: 'ROSE.jpg'
+                },
+                {
+                    name: 'Tulip Arrangement',
+                    description: 'A colorful arrangement of tulips.',
+                    price: 'RS.20',
+                    image: 'Tulip.jpg'
+                },
+                {
+                    name: 'Lily Plant',
+                    description: 'A potted orchid plant.',
+                    price: 'RS.30',
+                    image: 'LILY (1).JPG'
+                }
+            ];
+
+            $scope.order = {};
+            $scope.singup = {};
+        
+
+            $scope.submitOrder = function() {
+                if ($scope.orderForm.$valid) {
+                    // Handle form submission here
+                    alert('Order placed successfully!\n' +
+                          'Name: ' + $scope.order.name + '\n' +
+                          'Email: ' + $scope.order.email + '\n' +
+                          'Phone: ' + $scope.order.phone + '\n' +
+                          'Address: ' + $scope.order.address + '\n' +
+                          'Flower: ' + $scope.order.flower);
+                    $scope.order = {}; // Reset the order form
+                    $scope.orderForm.$setPristine();
+                    $scope.orderForm.$setUntouched();
+                }
+            };
+
+            
+   
+});
+    </script>
+</body>
+</html>
